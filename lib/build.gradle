@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 ext {
@@ -46,59 +45,6 @@ dependencies {
 
     api 'org.bouncycastle:bcprov-jdk15to18:1.66'
     api 'org.bouncycastle:bcpkix-jdk15to18:1.66'
-}
-
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    configurations = ['archives']
-    pkg {
-        repo = 'wulkanowy'
-        name = 'uonet-request-signer-hebe-android'
-        userOrg = 'wulkanowy'
-        licenses = ['Apache-2.0']
-        vcsUrl = GIT_URL
-        labels = ['aar', 'wulkanowy', 'uonet-request-signer']
-        publicDownloadNumbers = true
-        publish = true
-
-        version {
-            name = PUBLISH_VERSION
-            vcsTag = PUBLISH_VERSION
-            released = new Date()
-        }
-    }
-}
-
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'jar'
-                artifactId "uonet-request-signer-hebe-android"
-                name 'UONET+ (hebe) request signer for Android'
-                url SITE_URL
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'mklkj'
-                        name 'Mikołaj Pich'
-                        email 'm.pich@outlook.com'
-                    }
-                }
-                scm {
-                    connection GIT_URL
-                    developerConnection GIT_URL
-                    url SITE_URL
-                }
-            }
-        }
-    }
 }
 
 task classesJar(type: Jar) {
