@@ -71,7 +71,7 @@ install {
     repositories.mavenInstaller {
         pom {
             project {
-                packaging 'aar'
+                packaging 'jar'
                 artifactId "uonet-request-signer-hebe-android"
                 name 'UONET+ (hebe) request signer for Android'
                 url SITE_URL
@@ -98,11 +98,16 @@ install {
     }
 }
 
+task classesJar(type: Jar) {
+    from "$buildDir/intermediates/classes/release"
+}
+
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
 }
 
 artifacts {
+    archives classesJar
     archives sourcesJar
 }
