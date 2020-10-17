@@ -1,0 +1,108 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+ext {
+    PUBLISH_VERSION = '0.1.0'
+    SITE_URL = 'https://github.com/wulkanowy/uonet-request-signer'
+    GIT_URL = 'https://github.com/wulkanowy/uonet-request-signer.git'
+}
+
+group 'io.github.wulkanowy'
+version PUBLISH_VERSION
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 29
+        versionCode 1
+        versionName PUBLISH_VERSION
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.brsanthu:migbase64:2.2"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    api 'org.bouncycastle:bcprov-jdk15to18:1.66'
+    api 'org.bouncycastle:bcpkix-jdk15to18:1.66'
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    configurations = ['archives']
+    pkg {
+        repo = 'wulkanowy'
+        name = 'uonet-request-signer-hebe-android'
+        userOrg = 'wulkanowy'
+        licenses = ['Apache-2.0']
+        vcsUrl = GIT_URL
+        labels = ['aar', 'wulkanowy', 'uonet-request-signer']
+        publicDownloadNumbers = true
+        publish = true
+
+        version {
+            name = PUBLISH_VERSION
+            vcsTag = PUBLISH_VERSION
+            released = new Date()
+        }
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                artifactId "uonet-request-signer-hebe-android"
+                name 'UONET+ (hebe) request signer for Android'
+                url SITE_URL
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'mklkj'
+                        name 'Mikołaj Pich'
+                        email 'm.pich@outlook.com'
+                    }
+                }
+                scm {
+                    connection GIT_URL
+                    developerConnection GIT_URL
+                    url SITE_URL
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
